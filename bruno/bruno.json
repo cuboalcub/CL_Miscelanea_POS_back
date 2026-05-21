@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "CL_Miscelanea_POS",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
