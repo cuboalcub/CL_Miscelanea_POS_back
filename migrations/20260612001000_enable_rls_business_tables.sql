@@ -10,8 +10,8 @@ ALTER TABLE perfiles_empleados    ENABLE ROW LEVEL SECURITY;
 ALTER TABLE productos             ENABLE ROW LEVEL SECURITY;
 ALTER TABLE clientes              ENABLE ROW LEVEL SECURITY;
 ALTER TABLE categorias            ENABLE ROW LEVEL SECURITY;
-ALTER TABLE sync_operations       ENABLE ROW LEVEL SECURITY;
-ALTER TABLE sync_audit_log        ENABLE ROW LEVEL SECURITY;
+-- NOTE: sync_operations and sync_audit_log get ENABLE ROW LEVEL SECURITY + policies
+-- in 20260612003000_add_empresa_id_sync_operations.sql, after empresa_id is added.
 
 -- 2. Políticas para tablas con empresa_id directo
 CREATE POLICY tenant_isolation ON empresas
@@ -35,11 +35,6 @@ CREATE POLICY tenant_isolation ON clientes
 CREATE POLICY tenant_isolation ON categorias
     FOR ALL USING (empresa_id = current_setting('app.current_empresa_id')::UUID);
 
-CREATE POLICY tenant_isolation ON sync_operations
-    FOR ALL USING (empresa_id = current_setting('app.current_empresa_id')::UUID);
-
-CREATE POLICY tenant_isolation ON sync_audit_log
-    FOR ALL USING (empresa_id = current_setting('app.current_empresa_id')::UUID);
 
 -- 3. Política para usuarios: todos pueden ver usuarios (son globales),
 --    pero solo el propio usuario o admin de plataforma puede modificarlos

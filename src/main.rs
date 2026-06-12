@@ -26,39 +26,29 @@ async fn main() {
 
     let database_url = std::env::var("DATABASE_URL")
         .expect("La variable de entorno DATABASE_URL debe estar configurada");
-    let database_url_app = std::env::var("DATABASE_URL_APP_USER")
-        .unwrap_or_else(|_| database_url.clone());
 
     println!("==================================================");
     println!("🚀 Iniciando servidor backend de CL_Miscelanea_POS");
     println!("==================================================");
 
-    println!("🔌 Conectando a la base de datos (admin)...");
-    let admin_pool = PgPoolOptions::new()
-        .max_connections(2)
+    println!("🔌 Conectando a la base de datos...");
+    let pool = PgPoolOptions::new()
+        .max_connections(10)
         .connect(&database_url)
         .await
-        .expect("No se pudo conectar a la base de datos (admin)");
-    println!("✅ Conexión admin establecida con éxito.");
-
-    println!("🔌 Conectando a la base de datos (app)...");
-    let app_pool = PgPoolOptions::new()
-        .max_connections(10)
-        .connect(&database_url_app)
-        .await
-        .expect("No se pudo conectar a la base de datos (app)");
-    println!("✅ Conexión app establecida con éxito.");
+        .expect("No se pudo conectar a la base de datos");
+    println!("✅ Conexión establecida con éxito.");
 
     println!("⚙️ Corriendo migraciones pendientes...");
     sqlx::migrate!()
-        .run(&admin_pool)
+        .run(&pool)
         .await
         .expect("Fallo al correr las migraciones");
     println!("✅ Migraciones aplicadas con éxito.");
 
     let (stock_tx, _) = broadcast::channel::<StockAlertEvent>(256);
 
-    let state = AppState::new(app_pool, admin_pool, stock_tx);
+    let state = AppState::new(pool, stock_tx);
     let app = router::build(state);
 
     let _host = std::env::var("HOST").unwrap_or_else(|_| "127.0.0.1".to_string());

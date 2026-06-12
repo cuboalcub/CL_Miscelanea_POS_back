@@ -15,7 +15,7 @@ pub async fn listar_empresas(
     State(state): State<AppState>,
     _claims: Claims,
 ) -> Result<Json<Vec<Empresa>>, AppError> {
-    let empresas = empresa_repo::listar(&state.admin_db).await?;
+    let empresas = empresa_repo::listar(&state.db).await?;
     Ok(Json(empresas))
 }
 
@@ -24,7 +24,7 @@ pub async fn obtener_empresa(
     _claims: Claims,
     Path(id): Path<Uuid>,
 ) -> Result<Json<Empresa>, AppError> {
-    let empresa = empresa_repo::obtener(&state.admin_db, id).await?;
+    let empresa = empresa_repo::obtener(&state.db, id).await?;
     Ok(Json(empresa))
 }
 
@@ -34,7 +34,7 @@ pub async fn crear_empresa(
     Json(payload): Json<CreateEmpresaDto>,
 ) -> Result<(StatusCode, Json<Empresa>), AppError> {
     claims.require_super_admin(&state).await?;
-    let empresa = empresa_repo::crear(&state.admin_db, payload, Some(claims.usuario_id)).await?;
+    let empresa = empresa_repo::crear(&state.db, payload, Some(claims.usuario_id)).await?;
 
     let perfil_dto = crate::models::CreatePerfilDto {
         usuario_id: claims.usuario_id,
@@ -54,7 +54,7 @@ pub async fn actualizar_empresa(
     Json(payload): Json<UpdateEmpresaDto>,
 ) -> Result<Json<Empresa>, AppError> {
     claims.require_super_admin(&state).await?;
-    let empresa = empresa_repo::actualizar(&state.admin_db, id, payload).await?;
+    let empresa = empresa_repo::actualizar(&state.db, id, payload).await?;
     Ok(Json(empresa))
 }
 
@@ -64,6 +64,6 @@ pub async fn eliminar_empresa(
     Path(id): Path<Uuid>,
 ) -> Result<StatusCode, AppError> {
     claims.require_super_admin(&state).await?;
-    empresa_repo::eliminar(&state.admin_db, id).await?;
+    empresa_repo::eliminar(&state.db, id).await?;
     Ok(StatusCode::NO_CONTENT)
 }

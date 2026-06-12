@@ -9,7 +9,7 @@ BEGIN
     IF NOT EXISTS (
         SELECT FROM pg_catalog.pg_roles WHERE rolname = 'app_user'
     ) THEN
-        CREATE ROLE app_user WITH LOGIN PASSWORD 'app_user' NOBYPASSRLS;
+        CREATE ROLE app_user WITH LOGIN PASSWORD 'AppUser#POS2026!' NOBYPASSRLS;
         RAISE NOTICE 'Rol app_user creado exitosamente';
     ELSE
         RAISE NOTICE 'Rol app_user ya existe, omitiendo creación';

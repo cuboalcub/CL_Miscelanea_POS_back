@@ -15,3 +15,13 @@ ALTER TABLE sync_audit_log
     ALTER COLUMN empresa_id DROP DEFAULT;
 
 CREATE INDEX IF NOT EXISTS idx_sync_audit_log_empresa ON sync_audit_log(empresa_id);
+
+-- Habilitar RLS y aplicar políticas de aislamiento por tenant
+ALTER TABLE sync_operations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE sync_audit_log  ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY tenant_isolation ON sync_operations
+    FOR ALL USING (empresa_id = current_setting('app.current_empresa_id')::UUID);
+
+CREATE POLICY tenant_isolation ON sync_audit_log
+    FOR ALL USING (empresa_id = current_setting('app.current_empresa_id')::UUID);

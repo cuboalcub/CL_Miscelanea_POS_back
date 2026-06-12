@@ -112,7 +112,7 @@ impl Claims {
     }
 
     pub async fn require_admin_plataforma(&self, state: &AppState) -> Result<(), AppError> {
-        let usuario = crate::repositories::usuario_repo::obtener(&state.admin_db, self.usuario_id).await?;
+        let usuario = crate::repositories::usuario_repo::obtener(&state.db, self.usuario_id).await?;
 
         if !usuario.es_admin_plataforma {
             return Err(AppError::Forbidden(
