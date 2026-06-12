@@ -1,0 +1,15 @@
+meta {
+  name: Buscar Claves SAT
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/sat/claves?q={{query}}
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  query: café
+}

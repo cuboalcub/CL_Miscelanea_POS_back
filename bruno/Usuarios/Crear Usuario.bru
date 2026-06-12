@@ -1,0 +1,23 @@
+meta {
+  name: Crear Usuario
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/usuarios
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{jwt_token}}
+}
+
+body:json {
+  {
+    "nombre": "Carlos López",
+    "email": "carlos@mitiendita.com",
+    "password": "Admin123!"
+  }
+}

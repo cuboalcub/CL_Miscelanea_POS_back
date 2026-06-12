@@ -1,0 +1,15 @@
+meta {
+  name: Buscar Formas de Pago SAT
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/sat/formas-pago?q={{query}}
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  query: transferencia
+}

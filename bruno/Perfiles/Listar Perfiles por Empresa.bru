@@ -1,0 +1,19 @@
+meta {
+  name: Listar Perfiles por Empresa
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/perfiles?empresa_id={{empresa_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{jwt_token}}
+}
+
+vars:pre-request {
+  empresa_id: 00000000-0000-0000-0000-000000000000
+}

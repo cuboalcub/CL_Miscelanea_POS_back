@@ -1,0 +1,25 @@
+meta {
+  name: Crear Sucursal
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/sucursales
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{jwt_token}}
+}
+
+body:json {
+  {
+    "nombre": "Sucursal Norte",
+    "direccion_completa": "Av. Patriotismo 123, Ciudad de México",
+    "telefono": "5512345678",
+    "encargado": "Juan Pérez",
+    "empresa_id": "69be788e-7932-42e0-93f5-45ecae0f7308"
+  }
+}

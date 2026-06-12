@@ -1,0 +1,15 @@
+meta {
+  name: Buscar Metodos de Pago SAT
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{base_url}}/sat/metodos-pago?q={{query}}
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  query: PUE
+}

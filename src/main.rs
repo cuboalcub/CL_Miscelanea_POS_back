@@ -1,31 +1,74 @@
-use std::net::SocketAddr;
-use axum::{routing::get, Router};
-use dotenvy::dotenv;
+#![allow(dead_code)]
 
+use std::net::SocketAddr;
+
+use dotenvy::dotenv;
+use sqlx::postgres::PgPoolOptions;
+use tokio::sync::broadcast;
+
+mod auth;
+mod errors;
+mod handlers;
+mod middleware;
 mod models;
+mod processors;
+mod realtime;
+mod repositories;
+mod router;
+mod state;
+
+use realtime::StockAlertEvent;
+use state::AppState;
 
 #[tokio::main]
 async fn main() {
-    // Cargar variables de entorno desde el archivo .env si existe
     dotenv().ok();
+
+    let database_url = std::env::var("DATABASE_URL")
+        .expect("La variable de entorno DATABASE_URL debe estar configurada");
+    let database_url_app = std::env::var("DATABASE_URL_APP_USER")
+        .unwrap_or_else(|_| database_url.clone());
 
     println!("==================================================");
     println!("🚀 Iniciando servidor backend de CL_Miscelanea_POS");
     println!("==================================================");
 
-    // Inicializar router base de Axum
-    let app = Router::new()
-        .route("/health", get(health_check));
+    println!("🔌 Conectando a la base de datos (admin)...");
+    let admin_pool = PgPoolOptions::new()
+        .max_connections(2)
+        .connect(&database_url)
+        .await
+        .expect("No se pudo conectar a la base de datos (admin)");
+    println!("✅ Conexión admin establecida con éxito.");
 
-    // Definir dirección del servidor
-    let addr = SocketAddr::from(([127, 0, 0, 1], 8080));
+    println!("🔌 Conectando a la base de datos (app)...");
+    let app_pool = PgPoolOptions::new()
+        .max_connections(10)
+        .connect(&database_url_app)
+        .await
+        .expect("No se pudo conectar a la base de datos (app)");
+    println!("✅ Conexión app establecida con éxito.");
+
+    println!("⚙️ Corriendo migraciones pendientes...");
+    sqlx::migrate!()
+        .run(&admin_pool)
+        .await
+        .expect("Fallo al correr las migraciones");
+    println!("✅ Migraciones aplicadas con éxito.");
+
+    let (stock_tx, _) = broadcast::channel::<StockAlertEvent>(256);
+
+    let state = AppState::new(app_pool, admin_pool, stock_tx);
+    let app = router::build(state);
+
+    let _host = std::env::var("HOST").unwrap_or_else(|_| "127.0.0.1".to_string());
+    let port: u16 = std::env::var("PORT")
+        .ok()
+        .and_then(|v| v.parse().ok())
+        .unwrap_or(8080);
+    let addr = SocketAddr::from(([127, 0, 0, 1], port));
     println!("📡 Servidor escuchando en: http://{}", addr);
 
-    // Iniciar servidor
     let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
     axum::serve(listener, app).await.unwrap();
-}
-
-async fn health_check() -> &'static str {
-    "Backend OK - Tabla 'empresas' lista para usar!"
 }

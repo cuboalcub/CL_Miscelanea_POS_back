@@ -11,6 +11,7 @@ pub struct Empresa {
     pub regimen_fiscal: String,
     pub logo_url: Option<String>,
     pub subdominio: String,
+    pub owner_id: Option<Uuid>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }
@@ -31,4 +32,17 @@ pub struct UpdateEmpresaDto {
     pub regimen_fiscal: Option<String>,
     pub logo_url: Option<Option<String>>,
     pub subdominio: Option<String>,
+}
+
+/// Información de un dueño de empresa para el panel de admin de plataforma
+#[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
+pub struct DuenoInfo {
+    pub empresa_id: Uuid,
+    pub empresa_nombre: String,
+    pub empresa_subdominio: String,
+    pub dueno_id: Option<Uuid>,
+    pub dueno_nombre: Option<String>,
+    pub dueno_email: Option<String>,
+    pub total_sucursales: i64,
+    pub empresa_created_at: DateTime<Utc>,
 }

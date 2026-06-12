@@ -1,0 +1,55 @@
+meta {
+  name: Sincronizar Batch Offline
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/sync
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{jwt_token}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "operaciones": [
+      {
+        "cliente_id": "cli-001",
+        "tipo": "insertar",
+        "entidad": "clientes",
+        "datos": {
+          "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+          "nombre": "Juan Pérez",
+          "rfc": "XAXX010101000",
+          "telefono": "555-1234",
+          "empresa_id": "{{empresa_id}}"
+        },
+        "timestamp": "2026-06-12T00:00:00Z"
+      },
+      {
+        "cliente_id": "cli-002",
+        "tipo": "insertar",
+        "entidad": "productos",
+        "datos": {
+          "id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+          "nombre": "Café Molido 500g",
+          "codigo_barras": "7501234567890",
+          "precio_venta": 89.50,
+          "precio_compra": 55.00,
+          "sat_clave": "50202301",
+          "sat_unidad": "KGM",
+          "empresa_id": "{{empresa_id}}"
+        },
+        "timestamp": "2026-06-12T00:00:00Z"
+      }
+    ],
+    "dispositivo_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "sucursal_id": "00000000-0000-0000-0000-000000000000",
+    "ultimo_sync": "2026-01-01T00:00:00Z"
+  }
+}

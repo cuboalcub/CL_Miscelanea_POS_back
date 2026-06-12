@@ -1,0 +1,15 @@
+meta {
+  name: Buscar Usos CFDI SAT
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{base_url}}/sat/usos-cfdi?q={{query}}
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  query: mercancías
+}

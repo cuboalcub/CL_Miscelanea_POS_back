@@ -1,0 +1,15 @@
+meta {
+  name: Buscar Exportacion SAT
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{base_url}}/sat/exportacion?q={{query}}
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  query: no aplica
+}

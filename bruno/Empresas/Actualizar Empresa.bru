@@ -1,0 +1,26 @@
+meta {
+  name: Actualizar Empresa
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{base_url}}/empresas/{{empresa_id}}
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{jwt_token}}
+}
+
+vars:pre-request {
+  empresa_id: 00000000-0000-0000-0000-000000000000
+}
+
+body:json {
+  {
+    "nombre": "Mi Tiendita Actualizada S.A. de C.V.",
+    "logo_url": "https://example.com/nuevo-logo.png"
+  }
+}

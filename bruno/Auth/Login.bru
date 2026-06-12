@@ -1,0 +1,26 @@
+meta {
+  name: Login
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "admin@mitiendita.com",
+    "password": "Admin123!"
+  }
+}
+
+script:post-response {
+  if (res.status == 200) {
+    bru.setVar("jwt_token", res.body.token);
+    bru.setVar("empresa_id", res.body.perfil.empresa_id);
+    bru.setVar("usuario_id", res.body.usuario.id);
+  }
+}

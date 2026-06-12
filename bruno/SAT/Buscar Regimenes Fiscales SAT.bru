@@ -1,0 +1,15 @@
+meta {
+  name: Buscar Regimenes Fiscales SAT
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{base_url}}/sat/regimenes-fiscales?q={{query}}
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  query: personas morales
+}

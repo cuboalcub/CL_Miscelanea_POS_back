@@ -1,0 +1,25 @@
+meta {
+  name: Crear Empresa
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/empresas
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{jwt_token}}
+}
+
+body:json {
+  {
+    "nombre": "Mi Tiendita S.A. de C.V.",
+    "rfc": "MTS240521ABC",
+    "regimen_fiscal": "601 General de Ley Personas Morales",
+    "logo_url": null,
+    "subdominio": "mitiendita"
+  }
+}

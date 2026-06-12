@@ -1,0 +1,19 @@
+meta {
+  name: Obtener Empresa
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/empresas/{{empresa_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{jwt_token}}
+}
+
+vars:pre-request {
+  empresa_id: 00000000-0000-0000-0000-000000000000
+}

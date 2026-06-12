@@ -1,0 +1,24 @@
+meta {
+  name: Asignar Perfil
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/perfiles
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{jwt_token}}
+}
+
+body:json {
+  {
+    "usuario_id": "00000000-0000-0000-0000-000000000000",
+    "empresa_id": "00000000-0000-0000-0000-000000000000",
+    "sucursal_id": null,
+    "nivel": "cajero"
+  }
+}

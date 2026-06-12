@@ -1,0 +1,15 @@
+meta {
+  name: Listar Empresas
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/empresas
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{jwt_token}}
+}
