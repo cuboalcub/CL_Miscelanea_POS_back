@@ -1,0 +1,23 @@
+meta {
+  name: Actualizar Producto
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{base_url}}/productos/{{producto_id}}
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{jwt_token}}
+}
+
+body:json {
+  {
+    "nombre": "Café Molido 1kg",
+    "precio_venta": 159.50,
+    "precio_compra": 95.00
+  }
+}

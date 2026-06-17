@@ -1,0 +1,15 @@
+meta {
+  name: Obtener Producto
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/productos/{{producto_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{jwt_token}}
+}

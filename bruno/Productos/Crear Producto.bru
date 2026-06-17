@@ -1,0 +1,31 @@
+meta {
+  name: Crear Producto
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/productos
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{jwt_token}}
+}
+
+body:json {
+  {
+    "sku": "CAFE-500",
+    "codigo_barras": "7501234567890",
+    "nombre": "Café Molido 500g",
+    "descripcion": "Café molido de grano arábica 500 gramos",
+    "precio_venta": 89.50,
+    "precio_compra": 55.00,
+    "sat_clave": "50202301",
+    "sat_unidad": "KGM",
+    "categoria_id": null,
+    "iva_incluido": true,
+    "empresa_id": "{{empresa_id}}"
+  }
+}

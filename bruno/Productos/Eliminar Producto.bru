@@ -1,0 +1,15 @@
+meta {
+  name: Eliminar Producto
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{base_url}}/productos/{{producto_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{jwt_token}}
+}

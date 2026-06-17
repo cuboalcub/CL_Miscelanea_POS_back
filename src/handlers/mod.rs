@@ -4,6 +4,7 @@ pub mod compra_handler;
 pub mod empresa_handler;
 pub mod health_handler;
 pub mod perfil_handler;
+pub mod producto_handler;
 pub mod sat_handler;
 pub mod sse_handler;
 pub mod sucursal_handler;

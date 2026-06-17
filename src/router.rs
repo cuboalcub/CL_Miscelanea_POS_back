@@ -4,7 +4,7 @@ use axum::{
     Router,
 };
 
-use crate::handlers::{admin_handler, auth_handler, compra_handler, empresa_handler, health_handler, perfil_handler, sat_handler, sse_handler, sucursal_handler, sync_handler, usuario_handler, venta_handler};
+use crate::handlers::{admin_handler, auth_handler, compra_handler, empresa_handler, health_handler, perfil_handler, producto_handler, sat_handler, sse_handler, sucursal_handler, sync_handler, usuario_handler, venta_handler};
 use crate::state::AppState;
 
 /// Construye y devuelve el Router de Axum con todas las rutas CRUD registradas.
@@ -47,6 +47,17 @@ pub fn build(state: AppState) -> Router {
             get(usuario_handler::obtener_usuario)
                 .patch(usuario_handler::actualizar_usuario)
                 .delete(usuario_handler::eliminar_usuario),
+        )
+        // Productos CRUD (requiere autenticación)
+        .route(
+            "/productos",
+            get(producto_handler::listar_productos).post(producto_handler::crear_producto),
+        )
+        .route(
+            "/productos/{id}",
+            get(producto_handler::obtener_producto)
+                .patch(producto_handler::actualizar_producto)
+                .delete(producto_handler::eliminar_producto),
         )
         // Perfiles (pivot usuario ↔ empresa/sucursal)
         // GET /perfiles?usuario_id=... o ?empresa_id=...

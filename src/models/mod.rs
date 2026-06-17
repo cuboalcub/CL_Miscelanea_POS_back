@@ -25,7 +25,7 @@ pub use cliente::Cliente;
 pub use inventario::{CreateInventarioDto, Inventario, UpdateInventarioDto};
 #[allow(unused_imports)]
 pub use movimiento_stock::{CreateMovimientoStockDto, MovimientoStock, TipoMovimiento};
-pub use producto::Producto;
+pub use producto::{CreateProductoDto, Producto, UpdateProductoDto};
 pub use sat::{
     SatClaveProdServ, SatExportacion, SatFormaPago, SatMetodoPago, SatRegimenFiscal,
     SatTipoComprobante, SatUnidadMedida, SatUsoCfdi,
