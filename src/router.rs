@@ -1,4 +1,5 @@
 use axum::{
+    middleware,
     routing::{get, post},
     Router,
 };
@@ -79,6 +80,7 @@ pub fn build(state: AppState) -> Router {
             "/admin/duenos",
             get(admin_handler::listar_duenos),
         )
+        .layer(middleware::from_fn(crate::middleware::log_request_response))
         .with_state(state)
 }
 

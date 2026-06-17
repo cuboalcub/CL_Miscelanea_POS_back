@@ -1,0 +1,9 @@
+target/
+.git/
+.gitignore
+.env
+*.md
+bruno/
+docker/
+.dockerignore
+.agents/

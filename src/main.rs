@@ -1,10 +1,9 @@
 #![allow(dead_code)]
 
-use std::net::SocketAddr;
-
 use dotenvy::dotenv;
 use sqlx::postgres::PgPoolOptions;
 use tokio::sync::broadcast;
+use tracing_subscriber::{EnvFilter, fmt};
 
 mod auth;
 mod errors;
@@ -23,6 +22,13 @@ use state::AppState;
 #[tokio::main]
 async fn main() {
     dotenv().ok();
+
+    fmt()
+        .with_env_filter(
+            EnvFilter::try_from_default_env()
+                .unwrap_or_else(|_| EnvFilter::new("info")),
+        )
+        .init();
 
     let database_url = std::env::var("DATABASE_URL")
         .expect("La variable de entorno DATABASE_URL debe estar configurada");
@@ -51,12 +57,12 @@ async fn main() {
     let state = AppState::new(pool, stock_tx);
     let app = router::build(state);
 
-    let _host = std::env::var("HOST").unwrap_or_else(|_| "127.0.0.1".to_string());
+    let host = std::env::var("HOST").unwrap_or_else(|_| "127.0.0.1".to_string());
     let port: u16 = std::env::var("PORT")
         .ok()
         .and_then(|v| v.parse().ok())
         .unwrap_or(8080);
-    let addr = SocketAddr::from(([127, 0, 0, 1], port));
+    let addr = format!("{}:{}", host, port);
     println!("📡 Servidor escuchando en: http://{}", addr);
 
     let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();

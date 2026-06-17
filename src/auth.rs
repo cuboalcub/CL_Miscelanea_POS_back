@@ -10,6 +10,7 @@ use crate::errors::AppError;
 use crate::models::NivelAcceso;
 use crate::repositories::perfil_repo;
 use crate::state::AppState;
+use tracing::error;
 
 use argon2::{
     password_hash::{rand_core::OsRng, PasswordHash, PasswordHasher, PasswordVerifier, SaltString},
@@ -47,11 +48,18 @@ where
         let auth_header = parts
             .headers
             .get("Authorization")
-            .ok_or_else(|| AppError::Unauthorized("Falta cabecera de autenticación Authorization".to_string()))?
+            .ok_or_else(|| {
+                error!("Solicitud sin cabecera Authorization");
+                AppError::Unauthorized("Falta cabecera de autenticación Authorization".to_string())
+            })?
             .to_str()
-            .map_err(|_| AppError::BadRequest("Formato de cabecera inválido".to_string()))?;
+            .map_err(|_| {
+                error!("Cabecera Authorization con formato inválido");
+                AppError::BadRequest("Formato de cabecera inválido".to_string())
+            })?;
 
         if !auth_header.starts_with("Bearer ") {
+            error!("Cabecera Authorization no es de tipo Bearer");
             return Err(AppError::Unauthorized("El token de autorización debe ser de tipo Bearer".to_string()));
         }
 
@@ -66,7 +74,8 @@ where
                     nivel_acceso: token_data.claims.nivel,
                 })
             }
-            Err(_) => {
+            Err(e) => {
+                error!("Token JWT inválido o expirado: {:?}", e);
                 Err(AppError::Unauthorized(
                     "Token JWT inválido o expirado".to_string(),
                 ))

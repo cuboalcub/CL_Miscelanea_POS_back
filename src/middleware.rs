@@ -1,11 +1,54 @@
 use axum::{
+    body::Body,
     extract::{FromRef, FromRequestParts},
-    http::request::Parts,
+    http::{request::Parts, Request},
+    middleware::Next,
+    response::Response,
 };
+use std::time::Instant;
 use uuid::Uuid;
 
 use crate::errors::AppError;
 use crate::state::AppState;
+
+pub async fn log_request_response(request: Request<Body>, next: Next) -> Response {
+    let method = request.method().clone();
+    let uri = request.uri().clone();
+    let start = Instant::now();
+
+    let response = next.run(request).await;
+
+    let duration = start.elapsed();
+    let status = response.status();
+
+    if status.is_server_error() {
+        tracing::error!(
+            method = %method,
+            path = %uri,
+            status = %status,
+            duration_ms = duration.as_millis(),
+            "Error en la respuesta"
+        );
+    } else if status.is_client_error() {
+        tracing::warn!(
+            method = %method,
+            path = %uri,
+            status = %status,
+            duration_ms = duration.as_millis(),
+            "Solicitud inválida"
+        );
+    } else {
+        tracing::info!(
+            method = %method,
+            path = %uri,
+            status = %status,
+            duration_ms = duration.as_millis(),
+            "Respuesta exitosa"
+        );
+    }
+
+    response
+}
 
 #[derive(Debug, Clone)]
 pub struct TenantContext {
@@ -31,7 +74,10 @@ where
             .filter(|s| !s.is_empty())
         {
             let empresa_id = Uuid::parse_str(empresa_id_str)
-                .map_err(|_| AppError::BadRequest("X-Empresa-ID inválido".to_string()))?;
+                .map_err(|_| {
+                    tracing::error!("X-Empresa-ID inválido: {}", empresa_id_str);
+                    AppError::BadRequest("X-Empresa-ID inválido".to_string())
+                })?;
             return Ok(TenantContext { empresa_id });
         }
 
@@ -40,7 +86,10 @@ where
             .headers
             .get("Host")
             .and_then(|v| v.to_str().ok())
-            .ok_or_else(|| AppError::BadRequest("Cabecera Host requerida".to_string()))?;
+            .ok_or_else(|| {
+                tracing::error!("Cabecera Host faltante para resolución de tenant");
+                AppError::BadRequest("Cabecera Host requerida".to_string())
+            })?;
 
         let subdominio = host
             .split('.')
@@ -49,6 +98,7 @@ where
             .to_lowercase();
 
         if subdominio.is_empty() || subdominio == "localhost" || subdominio.contains("127.0.0.1") {
+            tracing::warn!("No se pudo resolver tenant desde subdominio, host: {}", host);
             return Err(AppError::BadRequest(
                 "No se pudo resolver el tenant desde el subdominio. Usa X-Empresa-ID para desarrollo.".to_string(),
             ));
@@ -60,8 +110,12 @@ where
         .bind(&subdominio)
         .fetch_optional(&app_state.db)
         .await
-        .map_err(|_| AppError::InternalError("Error al resolver tenant".to_string()))?
+        .map_err(|e| {
+            tracing::error!("Error en BD resolviendo tenant por subdominio '{}': {:?}", subdominio, e);
+            AppError::InternalError("Error al resolver tenant".to_string())
+        })?
         .ok_or_else(|| {
+            tracing::warn!("Empresa con subdominio '{}' no encontrada", subdominio);
             AppError::NotFound(format!("Empresa con subdominio '{}' no encontrada", subdominio))
         })?;
 
