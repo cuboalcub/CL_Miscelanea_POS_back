@@ -1,0 +1,32 @@
+meta {
+  name: Crear Venta
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/ventas
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{jwt_token}}
+}
+
+body:json {
+  {
+    "cliente_id": null,
+    "sucursal_id": "{{sucursal_id}}",
+    "forma_pago": "Efectivo",
+    "metodo_pago": "PUE",
+    "uso_cfdi": "G01",
+    "items": [
+      {
+        "producto_id": "00000000-0000-0000-0000-000000000000",
+        "cantidad": 2,
+        "precio_unitario": 89.50
+      }
+    ]
+  }
+}

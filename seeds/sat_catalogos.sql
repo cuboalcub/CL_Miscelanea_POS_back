@@ -9,16 +9,8 @@
 -- ============================================================================
 
 -- ============================================================================
--- 1. c_FormaPago — Formas de Pago
+-- 1. c_FormaPago — Formas de Pago (tabla creada en migración 20260528100000)
 -- ============================================================================
-CREATE TABLE IF NOT EXISTS sat_formas_pago (
-    clave        VARCHAR(10) PRIMARY KEY,
-    descripcion  VARCHAR(255) NOT NULL,
-    activo       BOOLEAN NOT NULL DEFAULT TRUE,
-    created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-CREATE INDEX IF NOT EXISTS idx_sat_formas_pago_descripcion ON sat_formas_pago(descripcion);
-
 INSERT INTO sat_formas_pago (clave, descripcion) VALUES
 ('01', 'Efectivo'),
 ('02', 'Cheque nominativo'),
@@ -45,33 +37,16 @@ INSERT INTO sat_formas_pago (clave, descripcion) VALUES
 ON CONFLICT (clave) DO UPDATE SET descripcion = EXCLUDED.descripcion;
 
 -- ============================================================================
--- 2. c_MetodoPago — Métodos de Pago
+-- 2. c_MetodoPago — Métodos de Pago (tabla creada en migración 20260528102000)
 -- ============================================================================
-CREATE TABLE IF NOT EXISTS sat_metodos_pago (
-    clave        VARCHAR(10) PRIMARY KEY,
-    descripcion  VARCHAR(255) NOT NULL,
-    activo       BOOLEAN NOT NULL DEFAULT TRUE,
-    created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-CREATE INDEX IF NOT EXISTS idx_sat_metodos_pago_descripcion ON sat_metodos_pago(descripcion);
-
 INSERT INTO sat_metodos_pago (clave, descripcion) VALUES
 ('PUE', 'Pago en una sola exhibición'),
 ('PPD', 'Pago en parcialidades o diferido')
 ON CONFLICT (clave) DO UPDATE SET descripcion = EXCLUDED.descripcion;
 
 -- ============================================================================
--- 3. c_UsoCFDI — Usos del CFDI
+-- 3. c_UsoCFDI — Usos del CFDI (tabla creada en migración 20260528103000)
 -- ============================================================================
-CREATE TABLE IF NOT EXISTS sat_usos_cfdi (
-    clave        VARCHAR(10) PRIMARY KEY,
-    descripcion  VARCHAR(255) NOT NULL,
-    regimen_fiscal_aplica VARCHAR(10) NOT NULL DEFAULT 'NA',
-    activo       BOOLEAN NOT NULL DEFAULT TRUE,
-    created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-CREATE INDEX IF NOT EXISTS idx_sat_usos_cfdi_descripcion ON sat_usos_cfdi(descripcion);
-
 INSERT INTO sat_usos_cfdi (clave, descripcion, regimen_fiscal_aplica) VALUES
 ('G01', 'Adquisición de mercancías', '601,603,605,606,607,608,610,611,612,614,615,616,620,621,622,623,624,625,626'),
 ('G02', 'Devoluciones, descuentos o bonificaciones', '601,603,605,606,607,608,610,611,612,614,615,616,620,621,622,623,624,625,626'),
@@ -102,16 +77,8 @@ ON CONFLICT (clave) DO UPDATE SET
     regimen_fiscal_aplica = EXCLUDED.regimen_fiscal_aplica;
 
 -- ============================================================================
--- 4. c_RegimenFiscal — Regímenes Fiscales del Contribuyente
+-- 4. c_RegimenFiscal — Regímenes Fiscales del Contribuyente (tabla creada en migración 20260528104000)
 -- ============================================================================
-CREATE TABLE IF NOT EXISTS sat_regimenes_fiscales (
-    clave        VARCHAR(10) PRIMARY KEY,
-    descripcion  VARCHAR(255) NOT NULL,
-    activo       BOOLEAN NOT NULL DEFAULT TRUE,
-    created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-CREATE INDEX IF NOT EXISTS idx_sat_regimenes_fiscales_descripcion ON sat_regimenes_fiscales(descripcion);
-
 INSERT INTO sat_regimenes_fiscales (clave, descripcion) VALUES
 ('601', 'General de Ley Personas Morales'),
 ('603', 'Personas Morales con Fines no Lucrativos'),
@@ -136,16 +103,8 @@ INSERT INTO sat_regimenes_fiscales (clave, descripcion) VALUES
 ON CONFLICT (clave) DO UPDATE SET descripcion = EXCLUDED.descripcion;
 
 -- ============================================================================
--- 5. c_TipoComprobante — Tipos de Comprobante Fiscal
+-- 5. c_TipoComprobante — Tipos de Comprobante Fiscal (tabla creada en migración 20260528105000)
 -- ============================================================================
-CREATE TABLE IF NOT EXISTS sat_tipos_comprobante (
-    clave        VARCHAR(10) PRIMARY KEY,
-    descripcion  VARCHAR(255) NOT NULL,
-    activo       BOOLEAN NOT NULL DEFAULT TRUE,
-    created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-CREATE INDEX IF NOT EXISTS idx_sat_tipos_comprobante_descripcion ON sat_tipos_comprobante(descripcion);
-
 INSERT INTO sat_tipos_comprobante (clave, descripcion) VALUES
 ('I', 'Ingreso'),
 ('E', 'Egreso'),
@@ -155,16 +114,8 @@ INSERT INTO sat_tipos_comprobante (clave, descripcion) VALUES
 ON CONFLICT (clave) DO UPDATE SET descripcion = EXCLUDED.descripcion;
 
 -- ============================================================================
--- 6. c_Exportacion — Claves de Exportación
+-- 6. c_Exportacion — Claves de Exportación (tabla creada en migración 20260528106000)
 -- ============================================================================
-CREATE TABLE IF NOT EXISTS sat_exportacion (
-    clave        VARCHAR(10) PRIMARY KEY,
-    descripcion  VARCHAR(255) NOT NULL,
-    activo       BOOLEAN NOT NULL DEFAULT TRUE,
-    created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-CREATE INDEX IF NOT EXISTS idx_sat_exportacion_descripcion ON sat_exportacion(descripcion);
-
 INSERT INTO sat_exportacion (clave, descripcion) VALUES
 ('01', 'No aplica'),
 ('02', 'Definitiva con clave A1'),
@@ -173,7 +124,7 @@ INSERT INTO sat_exportacion (clave, descripcion) VALUES
 ON CONFLICT (clave) DO UPDATE SET descripcion = EXCLUDED.descripcion;
 
 -- ============================================================================
--- 7. c_ClaveProdServ — Claves de Productos y Servicios (refresco)
+-- 7. c_ClaveProdServ — Claves de Productos y Servicios (refresco, tabla creada en migración 20260528098000)
 -- ============================================================================
 INSERT INTO sat_claves_prod_serv (clave, descripcion) VALUES
 ('01010101', 'No existe en el catálogo'),
@@ -191,7 +142,7 @@ INSERT INTO sat_claves_prod_serv (clave, descripcion) VALUES
 ON CONFLICT (clave) DO UPDATE SET descripcion = EXCLUDED.descripcion;
 
 -- ============================================================================
--- 8. c_ClaveUnidad — Unidades de Medida (refresco)
+-- 8. c_ClaveUnidad — Unidades de Medida (refresco, tabla creada en migración 20260528099000)
 -- ============================================================================
 INSERT INTO sat_unidades_medida (clave, nombre, descripcion) VALUES
 ('H87', 'Pieza', 'Unidad de conteo que define que el artículo se vende como una pieza única.'),

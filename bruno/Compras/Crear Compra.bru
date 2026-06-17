@@ -1,0 +1,29 @@
+meta {
+  name: Crear Compra
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/compras
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{jwt_token}}
+}
+
+body:json {
+  {
+    "proveedor": "Distribuidora XYZ",
+    "sucursal_id": "{{sucursal_id}}",
+    "items": [
+      {
+        "producto_id": "00000000-0000-0000-0000-000000000000",
+        "cantidad": 10,
+        "precio_unitario": 55.00
+      }
+    ]
+  }
+}

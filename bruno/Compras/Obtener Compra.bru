@@ -1,0 +1,15 @@
+meta {
+  name: Obtener Compra
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/compras/{{compra_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{jwt_token}}
+}

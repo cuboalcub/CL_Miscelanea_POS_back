@@ -4,7 +4,7 @@ use axum::{
     Router,
 };
 
-use crate::handlers::{admin_handler, auth_handler, empresa_handler, health_handler, perfil_handler, sat_handler, sse_handler, sucursal_handler, sync_handler, usuario_handler};
+use crate::handlers::{admin_handler, auth_handler, compra_handler, empresa_handler, health_handler, perfil_handler, sat_handler, sse_handler, sucursal_handler, sync_handler, usuario_handler, venta_handler};
 use crate::state::AppState;
 
 /// Construye y devuelve el Router de Axum con todas las rutas CRUD registradas.
@@ -71,6 +71,13 @@ pub fn build(state: AppState) -> Router {
         .route("/sat/regimenes-fiscales", get(sat_handler::buscar_regimenes_fiscales))
         .route("/sat/tipos-comprobante", get(sat_handler::buscar_tipos_comprobante))
         .route("/sat/exportacion", get(sat_handler::buscar_exportacion))
+        // Ventas (requiere autenticación)
+        .route("/ventas", post(venta_handler::crear_venta).get(venta_handler::listar_ventas))
+        .route("/ventas/{id}", get(venta_handler::obtener_venta))
+        .route("/ventas/{id}/cancelar", post(venta_handler::cancelar_venta))
+        // Compras (requiere autenticación)
+        .route("/compras", post(compra_handler::crear_compra).get(compra_handler::listar_compras))
+        .route("/compras/{id}", get(compra_handler::obtener_compra))
         // Sincronización offline para dispositivos móviles
         .route("/sync", post(sync_handler::sync_batch))
         // Realtime: alertas de stock vía SSE

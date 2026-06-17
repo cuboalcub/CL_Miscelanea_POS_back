@@ -1,16 +1,18 @@
+pub mod categoria;
 pub mod cliente;
+pub mod compra;
 pub mod empleado;
 pub mod empresa;
-pub mod perfil;
-pub mod categoria;
 pub mod inventario;
 pub mod movimiento_stock;
+pub mod perfil;
 pub mod producto;
 pub mod profile;
 pub mod sat;
 pub mod sucursal;
 pub mod sync;
 pub mod usuario;
+pub mod venta;
 
 #[allow(unused_imports)]
 pub use empleado::{CreatePerfilEmpleadoDto, PerfilEmpleado, UpdatePerfilEmpleadoDto};
@@ -30,6 +32,12 @@ pub use sat::{
 };
 pub use sucursal::{CreateSucursalDto, Sucursal, UpdateSucursalDto};
 pub use usuario::{CreateUsuarioDto, UpdateUsuarioDto, Usuario};
+pub use venta::{
+    CreateVentaRequest, Venta, VentaDetalle, VentaResponse,
+};
+pub use compra::{
+    Compra, CompraDetalle, CompraResponse, CreateCompraRequest,
+};
 
 
 

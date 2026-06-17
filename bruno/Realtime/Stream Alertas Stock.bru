@@ -1,0 +1,16 @@
+meta {
+  name: Stream Alertas Stock
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/realtime/stock?sucursal_id={{sucursal_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{jwt_token}}
+  Accept: text/event-stream
+}
