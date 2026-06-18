@@ -32,14 +32,21 @@ pub struct CreatePerfilEmpleadoDto {
     pub direccion: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default)]
 pub struct UpdatePerfilEmpleadoDto {
     pub nombre_completo: Option<String>,
+    #[serde(deserialize_with = "super::deserialize_present_option")]
     pub telefono: Option<Option<String>>,
+    #[serde(deserialize_with = "super::deserialize_present_option")]
     pub puesto: Option<Option<String>>,
+    #[serde(deserialize_with = "super::deserialize_present_option")]
     pub curp: Option<Option<String>>,
+    #[serde(deserialize_with = "super::deserialize_present_option")]
     pub nss: Option<Option<String>>,
+    #[serde(deserialize_with = "super::deserialize_present_option")]
     pub fecha_nacimiento: Option<Option<NaiveDate>>,
     pub fecha_ingreso: Option<NaiveDate>,
+    #[serde(deserialize_with = "super::deserialize_present_option")]
     pub direccion: Option<Option<String>>,
 }

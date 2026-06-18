@@ -1,8 +1,10 @@
 use axum::{
+    http::Method,
     middleware,
     routing::{get, post},
     Router,
 };
+use tower_http::cors::{Any, CorsLayer};
 
 use crate::handlers::{admin_handler, auth_handler, compra_handler, empresa_handler, health_handler, perfil_handler, producto_handler, sat_handler, sse_handler, sucursal_handler, sync_handler, usuario_handler, venta_handler};
 use crate::state::AppState;
@@ -15,13 +17,14 @@ pub fn build(state: AppState) -> Router {
         .route("/health", get(health_handler::health_check))
         // Auth
         .route("/auth/login", post(auth_handler::login))
+        .route("/auth/register", post(auth_handler::register))
         // Empresas CRUD
         .route(
             "/empresas",
             get(empresa_handler::listar_empresas).post(empresa_handler::crear_empresa),
         )
         .route(
-            "/empresas/{id}",
+            "/empresas/:id",
             get(empresa_handler::obtener_empresa)
                 .patch(empresa_handler::actualizar_empresa)
                 .delete(empresa_handler::eliminar_empresa),
@@ -32,7 +35,7 @@ pub fn build(state: AppState) -> Router {
             get(sucursal_handler::listar_sucursales).post(sucursal_handler::crear_sucursal),
         )
         .route(
-            "/sucursales/{id}",
+            "/sucursales/:id",
             get(sucursal_handler::obtener_sucursal)
                 .patch(sucursal_handler::actualizar_sucursal)
                 .delete(sucursal_handler::eliminar_sucursal),
@@ -43,7 +46,7 @@ pub fn build(state: AppState) -> Router {
             get(usuario_handler::listar_usuarios).post(usuario_handler::crear_usuario),
         )
         .route(
-            "/usuarios/{id}",
+            "/usuarios/:id",
             get(usuario_handler::obtener_usuario)
                 .patch(usuario_handler::actualizar_usuario)
                 .delete(usuario_handler::eliminar_usuario),
@@ -54,7 +57,7 @@ pub fn build(state: AppState) -> Router {
             get(producto_handler::listar_productos).post(producto_handler::crear_producto),
         )
         .route(
-            "/productos/{id}",
+            "/productos/:id",
             get(producto_handler::obtener_producto)
                 .patch(producto_handler::actualizar_producto)
                 .delete(producto_handler::eliminar_producto),
@@ -66,7 +69,7 @@ pub fn build(state: AppState) -> Router {
             get(perfil_handler::listar_perfiles).post(perfil_handler::crear_perfil),
         )
         .route(
-            "/perfiles/{id}",
+            "/perfiles/:id",
             get(perfil_handler::obtener_perfil)
                 .patch(perfil_handler::actualizar_perfil)
                 .delete(perfil_handler::eliminar_perfil),
@@ -84,11 +87,11 @@ pub fn build(state: AppState) -> Router {
         .route("/sat/exportacion", get(sat_handler::buscar_exportacion))
         // Ventas (requiere autenticación)
         .route("/ventas", post(venta_handler::crear_venta).get(venta_handler::listar_ventas))
-        .route("/ventas/{id}", get(venta_handler::obtener_venta))
-        .route("/ventas/{id}/cancelar", post(venta_handler::cancelar_venta))
+        .route("/ventas/:id", get(venta_handler::obtener_venta))
+        .route("/ventas/:id/cancelar", post(venta_handler::cancelar_venta))
         // Compras (requiere autenticación)
         .route("/compras", post(compra_handler::crear_compra).get(compra_handler::listar_compras))
-        .route("/compras/{id}", get(compra_handler::obtener_compra))
+        .route("/compras/:id", get(compra_handler::obtener_compra))
         // Sincronización offline para dispositivos móviles
         .route("/sync", post(sync_handler::sync_batch))
         // Realtime: alertas de stock vía SSE
@@ -97,6 +100,12 @@ pub fn build(state: AppState) -> Router {
         .route(
             "/admin/duenos",
             get(admin_handler::listar_duenos),
+        )
+        .layer(
+            CorsLayer::new()
+                .allow_origin(Any)
+                .allow_methods([Method::GET, Method::POST, Method::PATCH, Method::DELETE, Method::OPTIONS])
+                .allow_headers(Any),
         )
         .layer(middleware::from_fn(crate::middleware::log_request_response))
         .with_state(state)

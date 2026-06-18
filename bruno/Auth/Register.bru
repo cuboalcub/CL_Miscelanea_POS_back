@@ -1,0 +1,33 @@
+meta {
+  name: Register
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/auth/register
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "Felipe",
+    "email": "felipe@ejemplo.com",
+    "password": "Pass1234!",
+    "empresa_nombre": "Mi Empresa S.A. de C.V.",
+    "empresa_rfc": "XAXX010101000",
+    "empresa_regimen_fiscal": "601 General de Ley Personas Morales",
+    "empresa_subdominio": "mi-empresa",
+    "empresa_logo_url": "https://ejemplo.com/logo.png",
+    "empresa_color": "#3B82F6"
+  }
+}
+
+script:post-response {
+  if (res.status == 201) {
+    bru.setVar("jwt_token", res.body.token);
+    bru.setVar("empresa_id", res.body.empresa.id);
+    bru.setVar("usuario_id", res.body.usuario.id);
+  }
+}

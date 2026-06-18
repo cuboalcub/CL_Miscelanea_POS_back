@@ -24,11 +24,14 @@ pub struct CreateSucursalDto {
     pub empresa_id: Uuid,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default)]
 pub struct UpdateSucursalDto {
     pub nombre: Option<String>,
     pub direccion_completa: Option<String>,
+    #[serde(deserialize_with = "super::deserialize_present_option")]
     pub telefono: Option<Option<String>>,
+    #[serde(deserialize_with = "super::deserialize_present_option")]
     pub encargado: Option<Option<String>>,
     pub empresa_id: Option<Uuid>,
 }

@@ -21,25 +21,25 @@ ON CONFLICT (id) DO NOTHING;
 -- 2. USUARIOS (20)
 -- ============================================================================
 INSERT INTO usuarios (id, nombre, email, password_hash, activo, es_admin_plataforma) VALUES
-    ('30000000-3000-3000-3000-000000000002', 'Carlos López',               'carlos@ahorro.com',       'HASH:password123', TRUE,  FALSE),
-    ('30000000-3000-3000-3000-000000000003', 'María García',               'maria@ahorro.com',        'HASH:password123', TRUE,  FALSE),
-    ('30000000-3000-3000-3000-000000000004', 'José Martínez',              'jose@central.com',        'HASH:password123', TRUE,  FALSE),
-    ('30000000-3000-3000-3000-000000000005', 'Ana Hernández',              'ana@central.com',         'HASH:password123', TRUE,  FALSE),
-    ('30000000-3000-3000-3000-000000000006', 'Luis Rodríguez',             'luis@sanjose.com',        'HASH:password123', TRUE,  FALSE),
-    ('30000000-3000-3000-3000-000000000007', 'Sofía Ramírez',              'sofia@sanjose.com',       'HASH:password123', TRUE,  FALSE),
-    ('30000000-3000-3000-3000-000000000008', 'Pedro Sánchez',              'pedro@donamary.com',      'HASH:password123', TRUE,  FALSE),
-    ('30000000-3000-3000-3000-000000000009', 'Lucía Torres',               'lucia@donamary.com',      'HASH:password123', TRUE,  FALSE),
-    ('30000000-3000-3000-3000-000000000010', 'Miguel Flores',              'miguel@lapiz.com',        'HASH:password123', TRUE,  FALSE),
-    ('30000000-3000-3000-3000-000000000011', 'Diana Castillo',             'diana@ahorro.com',        'HASH:password123', TRUE,  FALSE),
-    ('30000000-3000-3000-3000-000000000012', 'Roberto González',           'roberto@central.com',     'HASH:password123', TRUE,  FALSE),
-    ('30000000-3000-3000-3000-000000000013', 'Gabriela Ortiz',             'gabriela@sanjose.com',    'HASH:password123', TRUE,  FALSE),
-    ('30000000-3000-3000-3000-000000000014', 'Fernando Vargas',            'fernando@donamary.com',   'HASH:password123', TRUE,  FALSE),
-    ('30000000-3000-3000-3000-000000000015', 'Alejandra Mendoza',          'alejandra@lapiz.com',     'HASH:password123', TRUE,  FALSE),
-    ('30000000-3000-3000-3000-000000000016', 'Ricardo Navarro',            'ricardo@ahorro.com',      'HASH:password123', TRUE,  FALSE),
-    ('30000000-3000-3000-3000-000000000017', 'Verónica Herrera',           'veronica@central.com',    'HASH:password123', TRUE,  FALSE),
-    ('30000000-3000-3000-3000-000000000018', 'Jorge Jiménez',              'jorge@sanjose.com',       'HASH:password123', TRUE,  FALSE),
-    ('30000000-3000-3000-3000-000000000019', 'Patricia Ruiz',              'patricia@donamary.com',   'HASH:password123', TRUE,  FALSE),
-    ('30000000-3000-3000-3000-000000000020', 'Héctor Morales',             'hector@lapiz.com',        'HASH:password123', TRUE,  FALSE)
+    ('30000000-3000-3000-3000-000000000002', 'Carlos López',               'carlos@ahorro.com',       'HASH_PLACEHOLDER:password123', TRUE,  FALSE),
+    ('30000000-3000-3000-3000-000000000003', 'María García',               'maria@ahorro.com',        'HASH_PLACEHOLDER:password123', TRUE,  FALSE),
+    ('30000000-3000-3000-3000-000000000004', 'José Martínez',              'jose@central.com',        'HASH_PLACEHOLDER:password123', TRUE,  FALSE),
+    ('30000000-3000-3000-3000-000000000005', 'Ana Hernández',              'ana@central.com',         'HASH_PLACEHOLDER:password123', TRUE,  FALSE),
+    ('30000000-3000-3000-3000-000000000006', 'Luis Rodríguez',             'luis@sanjose.com',        'HASH_PLACEHOLDER:password123', TRUE,  FALSE),
+    ('30000000-3000-3000-3000-000000000007', 'Sofía Ramírez',              'sofia@sanjose.com',       'HASH_PLACEHOLDER:password123', TRUE,  FALSE),
+    ('30000000-3000-3000-3000-000000000008', 'Pedro Sánchez',              'pedro@donamary.com',      'HASH_PLACEHOLDER:password123', TRUE,  FALSE),
+    ('30000000-3000-3000-3000-000000000009', 'Lucía Torres',               'lucia@donamary.com',      'HASH_PLACEHOLDER:password123', TRUE,  FALSE),
+    ('30000000-3000-3000-3000-000000000010', 'Miguel Flores',              'miguel@lapiz.com',        'HASH_PLACEHOLDER:password123', TRUE,  FALSE),
+    ('30000000-3000-3000-3000-000000000011', 'Diana Castillo',             'diana@ahorro.com',        'HASH_PLACEHOLDER:password123', TRUE,  FALSE),
+    ('30000000-3000-3000-3000-000000000012', 'Roberto González',           'roberto@central.com',     'HASH_PLACEHOLDER:password123', TRUE,  FALSE),
+    ('30000000-3000-3000-3000-000000000013', 'Gabriela Ortiz',             'gabriela@sanjose.com',    'HASH_PLACEHOLDER:password123', TRUE,  FALSE),
+    ('30000000-3000-3000-3000-000000000014', 'Fernando Vargas',            'fernando@donamary.com',   'HASH_PLACEHOLDER:password123', TRUE,  FALSE),
+    ('30000000-3000-3000-3000-000000000015', 'Alejandra Mendoza',          'alejandra@lapiz.com',     'HASH_PLACEHOLDER:password123', TRUE,  FALSE),
+    ('30000000-3000-3000-3000-000000000016', 'Ricardo Navarro',            'ricardo@ahorro.com',      'HASH_PLACEHOLDER:password123', TRUE,  FALSE),
+    ('30000000-3000-3000-3000-000000000017', 'Verónica Herrera',           'veronica@central.com',    'HASH_PLACEHOLDER:password123', TRUE,  FALSE),
+    ('30000000-3000-3000-3000-000000000018', 'Jorge Jiménez',              'jorge@sanjose.com',       'HASH_PLACEHOLDER:password123', TRUE,  FALSE),
+    ('30000000-3000-3000-3000-000000000019', 'Patricia Ruiz',              'patricia@donamary.com',   'HASH_PLACEHOLDER:password123', TRUE,  FALSE),
+    ('30000000-3000-3000-3000-000000000020', 'Héctor Morales',             'hector@lapiz.com',        'HASH_PLACEHOLDER:password123', TRUE,  FALSE)
 ON CONFLICT (email) DO NOTHING;
 
 -- ============================================================================

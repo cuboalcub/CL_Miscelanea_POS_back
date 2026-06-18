@@ -39,5 +39,13 @@ pub use compra::{
     Compra, CompraDetalle, CompraResponse, CreateCompraRequest,
 };
 
+pub fn deserialize_present_option<'de, D, T>(deserializer: D) -> Result<Option<T>, D::Error>
+where
+    D: serde::Deserializer<'de>,
+    T: serde::Deserialize<'de>,
+{
+    T::deserialize(deserializer).map(Some)
+}
+
 
 

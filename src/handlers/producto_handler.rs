@@ -7,8 +7,8 @@ use uuid::Uuid;
 
 use crate::auth::Claims;
 use crate::errors::AppError;
-use crate::models::{CreateProductoDto, NivelAcceso, Producto, UpdateProductoDto};
-use crate::repositories::producto_repo;
+use crate::models::{CreateInventarioDto, CreateProductoDto, NivelAcceso, Producto, UpdateProductoDto};
+use crate::repositories::{inventario_repo, producto_repo, sucursal_repo};
 use crate::state::AppState;
 
 pub async fn listar_productos(
@@ -38,6 +38,21 @@ pub async fn crear_producto(
     claims.require_role(&state, claims.empresa_id, &[NivelAcceso::SuperAdmin, NivelAcceso::Admin]).await?;
     state.set_tenant_context(claims.empresa_id, claims.usuario_id).await.map_err(|e| AppError::DatabaseError(e))?;
     let producto = producto_repo::crear(&state.db, payload).await?;
+
+    let sucursales = sucursal_repo::listar(&state.db, claims.empresa_id).await?;
+    for sucursal in &sucursales {
+        let dto = CreateInventarioDto {
+            producto_id: producto.id,
+            sucursal_id: sucursal.id,
+            stock_actual: None,
+            stock_minimo: None,
+            stock_maximo: None,
+            ubicacion: None,
+            empresa_id: claims.empresa_id,
+        };
+        inventario_repo::crear(&state.db, dto).await?;
+    }
+
     Ok((StatusCode::CREATED, Json(producto)))
 }
 

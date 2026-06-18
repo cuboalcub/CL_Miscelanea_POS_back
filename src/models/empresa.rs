@@ -12,6 +12,7 @@ pub struct Empresa {
     pub logo_url: Option<String>,
     pub subdominio: String,
     pub owner_id: Option<Uuid>,
+    pub color: Option<String>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }
@@ -23,15 +24,20 @@ pub struct CreateEmpresaDto {
     pub regimen_fiscal: String,
     pub logo_url: Option<String>,
     pub subdominio: String,
+    pub color: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default)]
 pub struct UpdateEmpresaDto {
     pub nombre: Option<String>,
     pub rfc: Option<String>,
     pub regimen_fiscal: Option<String>,
+    #[serde(deserialize_with = "super::deserialize_present_option")]
     pub logo_url: Option<Option<String>>,
     pub subdominio: Option<String>,
+    #[serde(deserialize_with = "super::deserialize_present_option")]
+    pub color: Option<Option<String>>,
 }
 
 /// Información de un dueño de empresa para el panel de admin de plataforma

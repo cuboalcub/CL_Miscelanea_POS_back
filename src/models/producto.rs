@@ -38,16 +38,23 @@ pub struct CreateProductoDto {
     pub empresa_id: Uuid,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default)]
 pub struct UpdateProductoDto {
+    #[serde(deserialize_with = "super::deserialize_present_option")]
     pub sku: Option<Option<String>>,
+    #[serde(deserialize_with = "super::deserialize_present_option")]
     pub codigo_barras: Option<Option<String>>,
     pub nombre: Option<String>,
+    #[serde(deserialize_with = "super::deserialize_present_option")]
     pub descripcion: Option<Option<String>>,
     pub precio_venta: Option<f64>,
     pub precio_compra: Option<f64>,
+    #[serde(deserialize_with = "super::deserialize_present_option")]
     pub sat_clave: Option<Option<String>>,
+    #[serde(deserialize_with = "super::deserialize_present_option")]
     pub sat_unidad: Option<Option<String>>,
+    #[serde(deserialize_with = "super::deserialize_present_option")]
     pub categoria_id: Option<Option<Uuid>>,
     pub iva_incluido: Option<bool>,
     pub activo: Option<bool>,

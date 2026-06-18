@@ -28,10 +28,12 @@ pub struct CreateInventarioDto {
     pub empresa_id: Uuid,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default)]
 pub struct UpdateInventarioDto {
     pub stock_actual: Option<f64>,
     pub stock_minimo: Option<f64>,
     pub stock_maximo: Option<f64>,
+    #[serde(deserialize_with = "super::deserialize_present_option")]
     pub ubicacion: Option<Option<String>>,
 }

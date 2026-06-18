@@ -14,13 +14,13 @@ headers {
   Authorization: Bearer {{jwt_token}}
 }
 
-vars:pre-request {
-  sucursal_id: 00000000-0000-0000-0000-000000000000
-}
-
 body:json {
   {
     "telefono": "555-999-8888",
     "encargado": "Juan Pérez"
   }
+}
+
+vars:pre-request {
+  sucursal_id: 20000000-2000-2000-2000-000000000015
 }
